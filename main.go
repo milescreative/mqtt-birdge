@@ -35,6 +35,7 @@ func main() {
 
 	// Setup HTTP server
 	http.HandleFunc("/publish", publishHandler)
+	http.HandleFunc("/health", healthHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -74,4 +75,14 @@ func publishHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Published to topic '%s': %s", topic, message)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Message published to topic: %s\n", topic)
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	if mqttClient.IsConnected() {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "OK")
+	} else {
+		w.WriteHeader(http.StatusServiceUnavailable)
+		fmt.Fprint(w, "MQTT broker disconnected")
+	}
 }
