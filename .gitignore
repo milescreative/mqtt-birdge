@@ -1,0 +1,12 @@
+# Binaries
+mqtt-bridge
+mqtt-bridge-pi
+*.exe
+
+# Environment
+.env
+
+# Go
+*.o
+*.a
+*.so
